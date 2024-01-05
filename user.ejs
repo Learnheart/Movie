@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>User list</h1>
+    <table border="1" width="100%">
+      <tr>
+        <th>S.No</th>
+        <th>Name</th>
+        <th>Phone number</th>
+        <th>Location</th>
+      </tr>
+      <% if(user.length > 0) { %> <% for(var i = 0; i < user.length; i++) { %>
+      <tr>
+        <td><%- user[i].userID %></td>
+        <td><%- user[i].userName %></td>
+        <td><%- user[i].phoneNumber %></td>
+        <td><%- user[i].location %></td>
+      </tr>
+      <% } %> <% }else { %> <% } %>
+    </table>
+  </body>
+</html>

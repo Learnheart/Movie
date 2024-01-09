@@ -2,7 +2,6 @@ var conn = require("./database");
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
-// const { error } = require("console");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,7 +14,7 @@ app.get("/register", function (req, res) {
 
 app.post("/register", function (req, res) {
   console.log(req.body);
-  var userName = req.body.userName; // corrected from req.body.name
+  var userName = req.body.userName;
   var DOB = req.body.DOB;
   var phoneNumber = req.body.phoneNumber;
   var location = req.body.location;
@@ -31,7 +30,6 @@ app.post("/register", function (req, res) {
       [userName, DOB, phoneNumber, location, password],
       function (error, result) {
         if (error) throw error;
-        // res.send("Create new account successfully, ID: " + result.insertId);
         res.redirect("/user");
       }
     );
@@ -55,6 +53,25 @@ app.get("/user", function (req, res) {
     });
   });
 });
+
+app.get("/food", function (req, res) {
+  conn.connect(function (error) {
+    if (error) {
+      console.log(error);
+      return res.status(500).send("Internal Server Error");
+    }
+
+    var displayFood = "SELECT * FROM food";
+    conn.query(displayFood, function (error, result) {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Internal Server Error");
+      }
+      res.render(__dirname + "/food.ejs", { user: result });
+    });
+  });
+});
+
 app.listen(7000, function () {
-  console.log("Server is listening on port http://127.0.0.1:7000/register");
+  console.log("Server is listening on port http://127.0.0.1:7000");
 });

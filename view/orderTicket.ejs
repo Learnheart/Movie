@@ -1,0 +1,52 @@
+<!-- Inside orderTicket.ejs -->
+<h1>Order Tickets</h1>
+
+<h2>Selected Movie</h2>
+<p>Title: <%= selectedMovie.title %></p>
+<p>Day: <%= selectedMovie.day %></p>
+<p>Time: <%= selectedMovie.time %></p>
+<p>Price: <%= selectedMovie.price %></p>
+
+<h2>Selected Seats</h2>
+<% if (selectedSeats.length > 0) { %>
+<ul>
+  <% for (var i = 0; i < selectedSeats.length; i++) { %>
+  <li>
+    Seat <%= selectedSeats[i].seatRow %><%= selectedSeats[i].seatNumber %> (<%=
+    selectedSeats[i].seatType %>)
+  </li>
+  <% } %>
+</ul>
+<% } else { %>
+<p>No seats selected.</p>
+<% } %>
+
+<h2>Additional Information</h2>
+<form action="/completeOrder" method="post">
+  <!-- Hidden inputs to pass data to the server -->
+  <input
+    type="hidden"
+    name="selectedMovieID"
+    value="<%= selectedMovie.movieID %>"
+  />
+  <% for (var i = 0; i < selectedSeats.length; i++) { %>
+  <input
+    type="hidden"
+    name="selectedSeats[]"
+    value="<%= selectedSeats[i].seatID %>"
+  />
+  <% } %>
+
+  <!-- Additional form fields can be added based on your requirements -->
+  <label for="customerName">Your Name:</label>
+  <input type="text" id="customerName" name="customerName" required />
+
+  <label for="paymentMethod">Payment Method:</label>
+  <select id="paymentMethod" name="paymentMethod" required>
+    <option value="Cash">Cash</option>
+    <option value="Card">Card</option>
+    <!-- Add more options as needed -->
+  </select>
+
+  <button type="submit">Place Order</button>
+</form>

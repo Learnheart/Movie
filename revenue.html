@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <h2>Total Revenue and Ticket for Each Movie</h2>
+    <canvas id="movieChart" width="400" height="100"></canvas>
+    <script>
+      fetch("/revenue")
+        .then((response) => response.json())
+        .then((data) => {
+          var labels = data.map((movie) => movie.movie_title);
+          var ticketsSoldData = data.map((movie) => movie.tickets_sold);
+          var totalRevenueData = data.map((movie) => movie.total_revenue);
+
+          var ctx = document.getElementById("movieChart").getContext("2d");
+
+          var chart = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Tickets Sold",
+                  data: ticketsSoldData,
+                  backgroundColor: "rgba(75, 192, 192, 0.2)",
+                  borderColor: "rgba(75, 192, 192, 1)",
+                  borderWidth: 1,
+                },
+                {
+                  label: "Total Revenue",
+                  data: totalRevenueData,
+                  backgroundColor: "rgba(255, 99, 132, 0.2)",
+                  borderColor: "rgba(255, 99, 132, 1)",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            },
+          });
+        })
+        .catch((error) => console.error("Error fetching data:", error));
+    </script>
+
+    <h2>Top 3 Movies Based on User Ratings</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Movie ID</th>
+          <th>Title</th>
+          <th>Average Rating</th>
+        </tr>
+      </thead>
+      <tbody id="topMoviesTableBody"></tbody>
+    </table>
+
+    <!-- Fetch top 3 movies based on user ratings -->
+    <script>
+      fetch("/rating")
+        .then((response) => response.json())
+        .then((topMovies) => {
+          var tableBody = document.getElementById("topMoviesTableBody");
+
+          topMovies.forEach((movie) => {
+            var row = document.createElement("tr");
+            var movieIDCell = document.createElement("td");
+            var titleCell = document.createElement("td");
+            var averageRatingCell = document.createElement("td");
+
+            movieIDCell.textContent = movie.movieID;
+            titleCell.textContent = movie.title;
+            averageRatingCell.textContent = movie.averageRating;
+
+            row.appendChild(movieIDCell);
+            row.appendChild(titleCell);
+            row.appendChild(averageRatingCell);
+
+            tableBody.appendChild(row);
+          });
+        })
+        .catch((error) =>
+          console.error("Error fetching top-rated movies:", error)
+        );
+    </script>
+
+    <h2>Top 5 Timeschedules Based on Ticket Sales</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Schedule ID</th>
+          <th>Day</th>
+          <th>Time</th>
+          <th>Total Tickets Sold</th>
+        </tr>
+      </thead>
+      <tbody id="topTimeschedulesTableBody"></tbody>
+    </table>
+
+    <script>
+      // Fetch top 5 timeschedules based on ticket sales
+      fetch("/timeschedule")
+        .then((response) => response.json())
+        .then((topTimeschedules) => {
+          var tableBody = document.getElementById("topTimeschedulesTableBody");
+
+          topTimeschedules.forEach((schedule) => {
+            var row = document.createElement("tr");
+            var scheduleIDCell = document.createElement("td");
+            var dayCell = document.createElement("td");
+            var timeCell = document.createElement("td");
+            var totalTicketsSoldCell = document.createElement("td");
+
+            scheduleIDCell.textContent = schedule.scheduleID;
+            dayCell.textContent = schedule.day;
+            timeCell.textContent = schedule.time;
+            totalTicketsSoldCell.textContent = schedule.totalTicketsSold;
+
+            row.appendChild(scheduleIDCell);
+            row.appendChild(dayCell);
+            row.appendChild(timeCell);
+            row.appendChild(totalTicketsSoldCell);
+
+            tableBody.appendChild(row);
+          });
+        })
+        .catch((error) =>
+          console.error("Error fetching top timeschedules:", error)
+        );
+    </script>
+  </body>
+</html>

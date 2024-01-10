@@ -63,6 +63,7 @@ app.get("/user", function (req, res) {
     });
   });
 });
+
 app.get("/revenue", (req, res) => {
   const sql = `
     SELECT m.movieID, m.title AS movie_title, 
@@ -83,6 +84,31 @@ app.get("/revenue", (req, res) => {
     }
 
     res.json(results);
+  });
+});
+
+// DEMO
+app.get("/demo", function (req, res) {
+  conn.connect(function (error) {
+    if (error) {
+      console.log(error);
+      res.res.status(500).send("Internal Server Error");
+    }
+    var topMoviesQuery = `
+    SELECT m.movieID, m.title, AVG(fb.rate_status) AS averageRating
+    FROM movie m
+    LEFT JOIN feedback fb ON m.movieID = fb.movieID
+    GROUP BY m.movieID, m.title
+    ORDER BY averageRating DESC
+    LIMIT 3;
+  `;
+    conn.query(topMoviesQuery, function (error, result) {
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Internal Server Error");
+      }
+      res.render(__dirname + "/demo.ejs", { movie: result });
+    });
   });
 });
 
@@ -131,5 +157,5 @@ app.get("/timeschedule", (req, res) => {
 });
 
 app.listen(7000, function () {
-  console.log("Server is listening on port http://localhost:7000/register");
+  console.log("Server is listening on port http://127.0.0.1:7000/register");
 });

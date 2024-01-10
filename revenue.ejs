@@ -61,7 +61,15 @@
           <th>Average Rating</th>
         </tr>
       </thead>
-      <tbody id="topMoviesTableBody"></tbody>
+      <tbody id="topMoviesTableBody">
+        <% topMovies.forEach((movie) => { %>
+        <tr>
+          <td><%= movie.movieID %></td>
+          <td><%= movie.title %></td>
+          <td><%= movie.averageRating %></td>
+        </tr>
+        <% }); %>
+      </tbody>
     </table>
 
     <!-- Fetch top 3 movies based on user ratings -->
@@ -103,7 +111,16 @@
           <th>Total Tickets Sold</th>
         </tr>
       </thead>
-      <tbody id="topTimeschedulesTableBody"></tbody>
+      <tbody id="topTimeschedulesTableBody">
+        <% topTimeschedules.forEach((schedule) => { %>
+        <tr>
+          <td><%= schedule.scheduleID %></td>
+          <td><%= schedule.day %></td>
+          <td><%= schedule.time %></td>
+          <td><%= schedule.totalTicketsSold %></td>
+        </tr>
+        <% }); %>
+      </tbody>
     </table>
 
     <script>

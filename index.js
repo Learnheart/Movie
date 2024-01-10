@@ -141,6 +141,7 @@ app.get("/user", function (req, res) {
   });
 });
 
+
 app.get("/movie", function (req, res) {
   conn.connect(function (error) {
     if (error) {
@@ -185,6 +186,24 @@ app.get("/movieDetail/:movieID", function (req, res) {
         movieID: result[0].movieID,
         movieDetail: result,
       });
+    });
+  });
+});
+app.get("/food", function (req, res) {
+  conn.connect(function (error) {
+    if (error) {
+      console.error(error);
+      return res.status(500).send("Internal Server Error");
+    }
+
+    var displayFood =
+      "SELECT distinct foodName, category, unitPrice FROM food ;";
+    conn.query(displayFood, function (error, result) {
+      if (error) {
+        console.error(error);
+        return res.status(500).send("Internal Server Error");
+      }
+      res.render(__dirname + "/view/food.ejs", { food: result });
     });
   });
 });
@@ -242,5 +261,5 @@ app.get("/availableSeats/:movieID/:scheduleID", function (req, res) {
 });
 
 app.listen(7000, function () {
-  console.log("Server is listening on port http://127.0.0.1:7000");
+  console.log("Server is listening on port http://127.0.0.1:7000/homepage");
 });
